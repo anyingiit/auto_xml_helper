@@ -1,5 +1,8 @@
 <template>
-  <div class="navFooter">NavFooter</div>
+  <div class="navFooter">
+    NavFooter
+    <el-button>el-button</el-button>
+  </div>
 </template>
 
 <script>
