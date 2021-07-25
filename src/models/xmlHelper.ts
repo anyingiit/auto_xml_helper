@@ -1,4 +1,4 @@
-class xmlHelper {
+export class XmlHelper {
   private xmlObj: Document = new Object as Document
   private designsDB: Element = new Object as Element
   constructor(xmlStr: string) {
