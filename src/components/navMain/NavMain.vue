@@ -24,7 +24,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['set'],
+  setup(props, ctx) {
     const fackDatas = reactive([
       {
         name: 'CO_EGR',
@@ -56,6 +57,11 @@ export default defineComponent({
         key,
         value,
       );
+      ctx.emit('set', {
+        index,
+        key,
+        newValue: value,
+      });
     };
     return {
       fackDatas,

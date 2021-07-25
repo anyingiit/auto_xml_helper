@@ -1,10 +1,10 @@
 <template>
   <div class="home">
     <nav-header></nav-header>
-    <nav-main :autoDatas="autoRequiresDatasTest"></nav-main>
+    <nav-main :autoDatas="autoRequiresDatasTest" @set="set"></nav-main>
     <nav-footer></nav-footer>
     <div>{{ autoRequiresDatasTest }}</div>
-    <button @click="setTest" style="height: 50px;"></button>
+    <button @click="set(0, 'scale', 'aaaa')" style="height: 50px;"></button>
   </div>
 </template>
 
@@ -52,6 +52,14 @@ export default defineComponent({
     const setTest = () => {
       (xmlHelper.getDesignsDBVar('CO_EGR') as Element).setAttribute('scale', '666');
     };
+    const set = (param: {index: number, key: string, newValue: string}) => {
+      const { index, key, newValue } = param;
+      console.log('-> index: number, key: string, newValue: string', index, key, newValue);
+      console.log('-> autoRequiresDatasTest', autoRequiresDatasTest);
+      // autoRequiresDatasTest[index].datas[key] = newValue;
+      (xmlHelper.getDesignsDBVar(autoRequiresDatasTest[index].name) as Element)
+        .setAttribute(key, newValue);
+    };
     onMounted(() => {
       autoTarget.value.forEach((item) => {
         const tmp: { [key: string]: string } = {};
@@ -69,6 +77,7 @@ export default defineComponent({
     return {
       setTest,
       autoRequiresDatasTest,
+      set,
     };
   },
 });
