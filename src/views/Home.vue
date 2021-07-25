@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <nav-header></nav-header>
-    <nav-main></nav-main>
+    <nav-main :autoDatas="autoRequiresDatasTest"></nav-main>
     <nav-footer></nav-footer>
     <div>{{ autoRequiresDatasTest }}</div>
     <button @click="setTest" style="height: 50px;"></button>

@@ -1,11 +1,11 @@
 <template>
   <div class="navMain">
-    <div class="items" v-for="(value, index) in fackDatas" v-bind:key="index">
+    <div class="items" v-for="(value, index) in trueDatas" v-bind:key="index">
       <div class="item" v-for="(item, key) in value.datas" v-bind:key="key">
         <div class="itemKeyName">{{ key }}</div>
         <el-input
           class="itemInputBox"
-          v-model="fackDatas[index].datas[key]"
+          v-model="trueDatas[index].datas[key]"
           @blur="blurTester(index, key, item)"
         ></el-input>
       </div>
@@ -24,7 +24,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     const fackDatas = reactive([
       {
         name: 'CO_EGR',
@@ -43,6 +43,7 @@ export default defineComponent({
         },
       },
     ]);
+    const trueDatas = reactive(props.autoDatas);
     // for (let i = 0; i < datas.value.length; i += 1) {
     //   watch(datas.value[i], (newValue, oldValue) => {
     //     console.log('NavMain.vue ~ line 52 ~ watch ~ newValue, oldValue', newValue, oldValue);
@@ -59,6 +60,7 @@ export default defineComponent({
     return {
       fackDatas,
       blurTester,
+      trueDatas,
     };
   },
 });
