@@ -43,33 +43,6 @@ export default defineComponent({
     },
     ]);
     const xmlHelper = new XmlHelper(xmlRowData);
-    // const autoRequiresDatas = computed(() => {
-    //   const tmpItems = ref([{}]) as Ref<[{
-    //     name: string,
-    //     datas: {
-    //       [propName: string]: unknown
-    //     }
-    //   }]>;
-    //   autoTarget.value.forEach((required) => {
-    //     const tmpRequires = ref<{
-    //       [propName: string]: unknown
-    //     }>({});
-    //     required.requires.forEach((key) => {
-    //       const dsinVar = xmlHelper.getDesignsDBVar(required.name);
-    //       if (dsinVar === undefined) {
-    //         console.error('🚀 ~ file: Home.vue ~ line 56 ~ required.requires.forEach ~ dsinVar'
-    //          , dsinVar);
-    //         return;
-    //       }
-    //       tmpRequires.value[key] = dsinVar.getAttribute(key);
-    //     });
-    //     tmpItems.value.push({
-    //       name: required.name,
-    //       datas: tmpRequires.value,
-    //     });
-    //   });
-    //   return tmpItems.value;
-    // });
     const autoRequiresDatasTest = reactive([]) as Array<{
       name: string,
       datas: {
@@ -100,7 +73,6 @@ export default defineComponent({
       });
     });
     return {
-      // autoRequiresDatas,
       setTest,
       autoRequiresDatasTest,
     };
