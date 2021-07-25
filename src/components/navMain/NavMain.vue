@@ -26,30 +26,7 @@ export default defineComponent({
   },
   emits: ['set'],
   setup(props, ctx) {
-    const fackDatas = reactive([
-      {
-        name: 'CO_EGR',
-        datas: {
-          value: '-100',
-          scale: '0',
-          shape2: '0',
-        },
-      },
-      {
-        name: 'CO_GPF',
-        datas: {
-          value: '0.0',
-          scale: '0',
-          shape2: '0',
-        },
-      },
-    ]);
     const trueDatas = reactive(props.autoDatas);
-    // for (let i = 0; i < datas.value.length; i += 1) {
-    //   watch(datas.value[i], (newValue, oldValue) => {
-    //     console.log('NavMain.vue ~ line 52 ~ watch ~ newValue, oldValue', newValue, oldValue);
-    //   });
-    // }
     const blurTester = (index, key, value) => {
       console.log(
         '🚀 ~ file: NavMain.vue ~ line 56 ~ blurTester ~ index, key, value',
@@ -64,7 +41,6 @@ export default defineComponent({
       });
     };
     return {
-      fackDatas,
       blurTester,
       trueDatas,
     };
