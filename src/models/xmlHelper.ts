@@ -1,29 +1,31 @@
 export default class XmlHelper {
-  private xmlObj: Document = new Document()
+  // private xmlObj: Document = new Document();
 
-  private designsDB: Element = new Element()
+  // private designsDB: Element = this.xmlObj.children[0]; // 使用折中方案骗过编译器
+
+  private xmlObj: Document;
+
+  private designsDB: Element;
 
   constructor(xmlStr: string) {
-    this.parserXml(xmlStr);
-    this.initDesignsDB();
+    this.xmlObj = new DOMParser().parseFromString(xmlStr, 'text/xml');
+    this.designsDB = this.gettDesignsDB() as Element;
   }
 
-  private parserXml(xmlStr: string) {
-    const parser = new DOMParser();
-    this.xmlObj = parser.parseFromString(xmlStr, 'text/xml');
-  }
-
-  private initDesignsDB() {
+  private gettDesignsDB(): Element | undefined {
     const obj = this.xmlObj.getElementsByTagName('DESIGNS_DB');
     for (let i = 0; i < obj.length; i += 1) {
       if (obj[i].tagName === 'DESIGNS_DB') {
         for (let j = 0; j < obj[i].children.length; j += 1) {
           if (obj[i].children[j].tagName === 'VARIABLES') {
-            this.designsDB = obj[i].children[j];
+            // this.designsDB = obj[i].children[j];
+            return obj[i].children[j];
           }
         }
       }
     }
+    console.error('🚀 ~ file: xmlHelper.ts ~ line 19 ~ XmlHelper ~ gettDesignsDB ~ DESIGNS_DB: faild');
+    return undefined;
   }
 
   public getXmlObj(): Document {
