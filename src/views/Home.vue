@@ -53,25 +53,6 @@ export default defineComponent({
       (xmlHelper.getDesignsDBVar('CO_EGR') as Element).setAttribute('scale', '666');
     };
     onMounted(() => {
-      // autoTarget.value.forEach((item) => {
-      //   const tmp: { [key: string]: string } = {};
-      //   item.requires.forEach((property) => {
-      //     tmp[property] = '';
-      //   });
-      //   autoRequiresDatasTest.push({
-      //     name: item.name,
-      //     datas: tmp,
-      //   });
-      // });
-      //
-      // autoRequiresDatasTest.forEach((item, index) => {
-      //   Object.keys(item.datas).forEach((itemDataKey) => {
-      //     autoRequiresDatasTest[index].datas[itemDataKey] = (xmlHelper
-      //       .getDesignsDBVar(item.name) as Element)
-      //       .getAttribute(itemDataKey) as string;
-      //   });
-      // });
-
       autoTarget.value.forEach((item) => {
         const tmp: { [key: string]: string } = {};
         item.requires.forEach((property) => {
