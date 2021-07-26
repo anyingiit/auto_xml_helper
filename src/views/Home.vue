@@ -55,17 +55,6 @@ export default defineComponent({
         [propName: string]: string
       }
     }>;
-    const setTest = () => {
-      (xmlHelper.getDesignsDBVar('CO_EGR') as Element).setAttribute('scale', '666');
-    };
-    // const set = (param: {index: number, key: string, newValue: string}) => {
-    //   const { index, key, newValue } = param;
-    //   console.log('-> index: number, key: string, newValue: string', index, key, newValue);
-    //   console.log('-> autoRequiresDatasTest', autoRequiresDatasTest);
-    //   // autoRequiresDatasTest[index].datas[key] = newValue;
-    //   (xmlHelper.getDesignsDBVar(autoRequiresDatasTest[index].name) as Element)
-    //     .setAttribute(key, newValue);
-    // };
     const xmlRowDataStr = computed(() => (xmlHelper.getDesignsDBVar('CO_EGR') as Element).getAttribute('value')).value;
     const checkAndSet = (param: {index: number, key: string}) => {
       const { index, key } = param;
@@ -110,7 +99,6 @@ export default defineComponent({
       });
     });
     return {
-      setTest,
       autoRequiresDatas,
       checkAndSet,
       xmlRowDataStr,
