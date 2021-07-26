@@ -45,12 +45,15 @@ export default defineComponent({
       if (/^(-?\d+)(\.\d+)?$/.test(value)) {
         if (!Number.isNaN(parseFloat(value))) {
           console.log(parseFloat(value).toString());
-          if (value.length - (value.indexOf('.') + 1) > 1) {
-            ElMessage.warning({
-              message: '您输入的小数大于一位, 已帮您修正!',
-              type: 'warning',
-            });
+          if (value.indexOf('.') !== -1) {
+            if ((value.length - (value.indexOf('.') + 1)) > 1) {
+              ElMessage.warning({
+                message: '您输入的小数大于一位, 已帮您修正!',
+                type: 'warning',
+              });
+            }
           }
+
           trueDatas[index].datas[key] = parseFloat(value).toFixed(1).toString();
           ctx.emit('checkAndSet', {
             index,
@@ -62,6 +65,7 @@ export default defineComponent({
             message: '输入的字符不是数字',
             duration: 2500,
           });
+          // TODO: 将错误的数据修改为原始数据
         }
       } else {
         ElNotification({
@@ -69,6 +73,7 @@ export default defineComponent({
           message: '输入的值包含非法字符',
           duration: 2500,
         });
+        // TODO: 将错误的数据修改为原始数据
       }
     };
     return {
