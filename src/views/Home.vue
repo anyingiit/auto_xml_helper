@@ -20,6 +20,7 @@ import navFooter from '@/components/navFooter/NavFooter.vue';
 import XmlHelper from '@/models/XmlHelper';
 import xmlRowData from '@/assets/xmlRowData';
 import { ElNotification } from 'element-plus';
+import { demoMode } from '@/conf/config';
 
 export default defineComponent({
   name: 'Home',
@@ -42,7 +43,7 @@ export default defineComponent({
       requires: ['scale', 'tolerance', 'value'],
     },
     ]);
-    const xmlHelper = new XmlHelper(xmlRowData);
+    let xmlHelper: XmlHelper;
     const autoRequiresDatas = reactive([]) as Array<{
       name: string,
       datas: {
@@ -94,6 +95,10 @@ export default defineComponent({
       console.log(xmlHelper.getXmlStr());
     };
     onMounted(() => {
+      if (demoMode) {
+        xmlHelper = new XmlHelper(xmlRowData);
+      }
+
       autoTarget.value.forEach((item) => {
         const tmp: { [key: string]: string } = {};
         item.requires.forEach((property) => {
