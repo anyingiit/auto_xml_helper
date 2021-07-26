@@ -24,7 +24,7 @@ export default class XmlHelper {
         }
       }
     }
-    console.error('🚀 ~ file: xmlHelper.ts ~ line 19 ~ XmlHelper ~ gettDesignsDB ~ DESIGNS_DB: faild');
+    console.error('🚀 ~ file: XmlHelper.ts ~ line 19 ~ XmlHelper ~ gettDesignsDB ~ DESIGNS_DB: faild');
     return undefined;
   }
 
