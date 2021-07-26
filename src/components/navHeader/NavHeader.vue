@@ -1,5 +1,7 @@
 <template>
-  <div class="navHeader">NavHeader</div>
+  <div class="navHeader">
+    <h2 class="text">Auto Xml Helper</h2>
+  </div>
 </template>
 
 <script>
@@ -10,5 +12,11 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped lang="scss">
+.navHeader{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .text{}
+}
 </style>

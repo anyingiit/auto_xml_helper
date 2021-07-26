@@ -2,8 +2,8 @@
   <div class="home">
     <nav-header></nav-header>
     <nav-main :autoDatas="autoRequiresDatas" @checkAndSet="checkAndSet"></nav-main>
-    <nav-footer></nav-footer>
-    <div>{{ autoRequiresDatas }}</div>
+    <nav-footer @xmlSave="xmlSave"></nav-footer>
+<!--    <div>{{ autoRequiresDatas }}</div>-->
   </div>
 </template>
 
@@ -12,13 +12,14 @@ import {
   defineComponent,
   ref,
   reactive,
-  onMounted, computed,
+  onMounted,
 } from 'vue';
 import navHeader from '@/components/navHeader/NavHeader.vue';
 import navMain from '@/components/navMain/NavMain.vue';
 import navFooter from '@/components/navFooter/NavFooter.vue';
 import XmlHelper from '@/models/XmlHelper';
 import xmlRowData from '@/assets/xmlRowData';
+import { ElNotification } from 'element-plus';
 
 export default defineComponent({
   name: 'Home',
@@ -69,13 +70,28 @@ export default defineComponent({
 
         if ((xmlHelper.getDesignsDBVar(autoRequiresDatas[index].name) as Element)
           .getAttribute(key) === autoRequiresDatas[index].datas[key]) {
+          ElNotification({
+            title: '成功',
+            message: '记录成功',
+            type: 'success',
+            duration: 1200,
+          });
           console.log('check pass!');
           autoRequiresDatasSync[index].datas[key] = autoRequiresDatas[index].datas[key];
           // console.log(xmlHelper.getXmlStr());
         } else {
+          ElNotification({
+            title: '错误',
+            message: '记录失败...',
+            duration: 0,
+            showClose: false,
+          });
           console.log('check faild!');// TODO: 弹出错误提示框, 提示数据修改失败!
         }
       }
+    };
+    const xmlSave = () => {
+      console.log(xmlHelper.getXmlStr());
     };
     onMounted(() => {
       autoTarget.value.forEach((item) => {
@@ -98,6 +114,7 @@ export default defineComponent({
     return {
       autoRequiresDatas,
       checkAndSet,
+      xmlSave,
     };
   },
 });
