@@ -62,14 +62,14 @@ export default defineComponent({
       console.log('-> autoRequiresDatasSync[index].datas[key]', autoRequiresDatasSync[index].datas[key]);
       // console.log('-> autoRequiresDatasTest', autoRequiresDatasTest);
       // autoRequiresDatasTest[index].datas[key] = newValue;
+      const targetVar: Element = xmlHelper
+        .getDesignsDBVar(autoRequiresDatas[index].name) as Element;
       if (autoRequiresDatasSync[index].datas[key] !== autoRequiresDatas[index].datas[key]) {
         console.log('has diff');
 
-        (xmlHelper.getDesignsDBVar(autoRequiresDatas[index].name) as Element)
-          .setAttribute(key, autoRequiresDatas[index].datas[key]);
+        targetVar.setAttribute(key, autoRequiresDatas[index].datas[key]);
 
-        if ((xmlHelper.getDesignsDBVar(autoRequiresDatas[index].name) as Element)
-          .getAttribute(key) === autoRequiresDatas[index].datas[key]) {
+        if (targetVar.getAttribute(key) === autoRequiresDatas[index].datas[key]) {
           ElNotification({
             title: '成功',
             message: '记录成功',
@@ -97,9 +97,8 @@ export default defineComponent({
       autoTarget.value.forEach((item) => {
         const tmp: { [key: string]: string } = {};
         item.requires.forEach((property) => {
-          tmp[property] = (xmlHelper
-            .getDesignsDBVar(item.name) as Element)
-            .getAttribute(property) as string;
+          const targetVar: Element = xmlHelper.getDesignsDBVar(item.name) as Element;
+          tmp[property] = (targetVar.getAttribute(property)) as string;
         });
         autoRequiresDatas.push({
           name: item.name,
