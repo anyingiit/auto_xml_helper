@@ -24,7 +24,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['set'],
+  emits: ['checkAndSet'],
   setup(props, ctx) {
     const trueDatas = reactive(props.autoDatas);
     const blurTester = (index, key, value) => {
@@ -34,10 +34,9 @@ export default defineComponent({
         key,
         value,
       );
-      ctx.emit('set', {
+      ctx.emit('checkAndSet', {
         index,
         key,
-        newValue: value,
       });
     };
     return {
