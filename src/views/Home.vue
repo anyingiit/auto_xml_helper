@@ -4,7 +4,6 @@
     <nav-main :autoDatas="autoRequiresDatas" @checkAndSet="checkAndSet"></nav-main>
     <nav-footer></nav-footer>
     <div>{{ autoRequiresDatas }}</div>
-    <div>{{xmlRowDataStr}}</div>
   </div>
 </template>
 
@@ -55,7 +54,6 @@ export default defineComponent({
         [propName: string]: string
       }
     }>;
-    const xmlRowDataStr = computed(() => (xmlHelper.getDesignsDBVar('CO_EGR') as Element).getAttribute('value')).value;
     const checkAndSet = (param: {index: number, key: string}) => {
       const { index, key } = param;
       console.log('-> index: number, key: string, ', index, key);
@@ -74,7 +72,6 @@ export default defineComponent({
           console.log('check pass!');
           autoRequiresDatasSync[index].datas[key] = autoRequiresDatas[index].datas[key];
           // console.log(xmlHelper.getXmlStr());
-          console.log(xmlRowDataStr);
         } else {
           console.log('check faild!');// TODO: 弹出错误提示框, 提示数据修改失败!
         }
@@ -101,7 +98,6 @@ export default defineComponent({
     return {
       autoRequiresDatas,
       checkAndSet,
-      xmlRowDataStr,
     };
   },
 });
