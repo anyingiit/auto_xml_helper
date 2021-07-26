@@ -11,6 +11,8 @@
             class="itemInputBox"
             v-model="trueDatas[index].datas[key]"
             @blur="blurTester(index, key, item)"
+            maxlength="10"
+            show-word-limit
           ></el-input>
         </div>
       </div>
@@ -20,6 +22,7 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
+import { ElNotification, ElMessage } from 'element-plus';
 
 export default defineComponent({
   name: 'navMain',
@@ -39,10 +42,34 @@ export default defineComponent({
         key,
         value,
       );
-      ctx.emit('checkAndSet', {
-        index,
-        key,
-      });
+      if (/^(-?\d+)(\.\d+)?$/.test(value)) {
+        if (!Number.isNaN(parseFloat(value))) {
+          console.log(parseFloat(value).toString());
+          if (value.length - (value.indexOf('.') + 1) > 1) {
+            ElMessage.warning({
+              message: '您输入的小数大于一位, 已帮您修正!',
+              type: 'warning',
+            });
+          }
+          trueDatas[index].datas[key] = parseFloat(value).toFixed(1).toString();
+          ctx.emit('checkAndSet', {
+            index,
+            key,
+          });
+        } else {
+          ElNotification({
+            title: '错误',
+            message: '输入的字符不是数字',
+            duration: 2500,
+          });
+        }
+      } else {
+        ElNotification({
+          title: '错误',
+          message: '输入的值包含非法字符',
+          duration: 2500,
+        });
+      }
     };
     return {
       blurTester,
