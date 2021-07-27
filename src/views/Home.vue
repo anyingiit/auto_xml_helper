@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <nav-header></nav-header>
-    <nav-main :autoDatas="autoRequiresDatas"
+    <nav-main v-if="autoRequiresDatas.length > 0"
+              :autoDatas="autoRequiresDatas"
               @set="set"
     ></nav-main>
     <nav-footer @xmlSave="xmlSave"></nav-footer>
