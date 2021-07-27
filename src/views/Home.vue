@@ -81,6 +81,7 @@ export default defineComponent({
           type: 'warning',
         });
       }
+      // WARN: 注意这里潜在的风险, 如果在该变量仅仅支持INT类型, 在加入'.0'后是否会造成专业软件无法识别的问题?
       const newValueFormatted = parseFloat(newValue).toFixed(1).toString();
       // 设置完成后进行数据验证, 数据验证完毕子组件根据props.autoDatas获取值更新到自己的输入框
       targetVar.setAttribute(key, newValueFormatted);
