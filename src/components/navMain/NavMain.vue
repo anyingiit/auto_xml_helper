@@ -24,25 +24,19 @@
 
 <script lang="ts">
 import {
-  defineComponent, onMounted, reactive,
+  defineComponent, onMounted, PropType, reactive,
 } from 'vue';
 
 export default defineComponent({
   name: 'navMain',
   props: {
     autoDatas: {
-      type: Array,
+      type: Array as PropType<Array<{ name: string, datas: { [propName: string]: string } }>>,
       required: true,
     },
   },
   emits: ['set'],
   setup(props, ctx) {
-    const syncAutoDatas = props.autoDatas as Array<{
-      name: string,
-      datas: {
-        [propName: string]: string
-      }
-    }>;
     const localDatas = reactive([]) as Array<{
       name: string,
       datas: {
@@ -55,17 +49,16 @@ export default defineComponent({
         key,
         newValue: value,
       });
-      localDatas[index].datas[key] = syncAutoDatas[index].datas[key];
+      localDatas[index].datas[key] = props.autoDatas[index].datas[key];
     };
     onMounted(() => {
-      console.log(JSON.stringify(props.autoDatas));
-      console.log(JSON.parse(JSON.stringify(props.autoDatas)));
-      syncAutoDatas.forEach((item) => {
+      // console.log(JSON.stringify(props.autoDatas));
+      // console.log(JSON.parse(JSON.stringify(props.autoDatas)));
+      props.autoDatas.forEach((item) => {
         localDatas.push(JSON.parse(JSON.stringify(item)));
       });
     });
     return {
-      syncAutoDatas,
       localDatas,
       blurSet,
     };
