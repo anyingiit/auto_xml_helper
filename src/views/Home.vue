@@ -53,48 +53,6 @@ export default defineComponent({
         [propName: string]: string
       }
     }>;
-    // const autoRequiresDatasSync = reactive([]) as Array<{
-    //   name: string,
-    //   datas: {
-    //     [propName: string]: string
-    //   }
-    // }>;
-    // const checkAndSet = (param: {index: number, key: string}) => {
-    //   const { index, key } = param;
-    //   console.log('-> index: number, key: string, ', index, key);
-    //   console.log('-> autoRequiresDatas[index].datas[key]', autoRequiresDatas[index].datas[key]);
-    //   console.log('-> autoRequiresDatasSync[index].datas[key]',
-    //                autoRequiresDatasSync[index].datas[key]);
-    //   // console.log('-> autoRequiresDatasTest', autoRequiresDatasTest);
-    //   // autoRequiresDatasTest[index].datas[key] = newValue;
-    //   const targetVar: Element = xmlHelper
-    //     .getDesignsDBVar(autoRequiresDatas[index].name) as Element;
-    //   if (autoRequiresDatasSync[index].datas[key] !== autoRequiresDatas[index].datas[key]) {
-    //     console.log('has diff');
-    //
-    //     targetVar.setAttribute(key, autoRequiresDatas[index].datas[key]);
-    //
-    //     if (targetVar.getAttribute(key) === autoRequiresDatas[index].datas[key]) {
-    //       ElNotification({
-    //         title: '成功',
-    //         message: '记录成功',
-    //         type: 'success',
-    //         duration: 1200,
-    //       });
-    //       console.log('check pass!');
-    //       autoRequiresDatasSync[index].datas[key] = autoRequiresDatas[index].datas[key];
-    //       // console.log(xmlHelper.getXmlStr());
-    //     } else {
-    //       ElNotification({
-    //         title: '错误',
-    //         message: '记录失败...',
-    //         duration: 0,
-    //         showClose: false,
-    //       });
-    //       console.log('check faild!');
-    //     }
-    //   }
-    // };
     const set = (param: {index: number, key: string, newValue: string}) => {
       const { index, key, newValue } = param;
       if (autoRequiresDatas[index].datas[key] === newValue) { return; }
@@ -164,14 +122,9 @@ export default defineComponent({
           datas: tmp,
         });
       });
-
-      // autoRequiresDatas.forEach((item) => {
-      //   autoRequiresDatasSync.push(JSON.parse(JSON.stringify(item)));
-      // });
     });
     return {
       autoRequiresDatas,
-      // checkAndSet,
       xmlSave,
       set,
     };
