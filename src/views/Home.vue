@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <nav-header></nav-header>
-    <nav-main :autoDatas="autoRequiresDatas" @checkAndSet="checkAndSet"></nav-main>
+    <nav-main :autoDatas="autoRequiresDatas"
+              @set="set"
+    ></nav-main>
     <nav-footer @xmlSave="xmlSave"></nav-footer>
 <!--    <div>{{ autoRequiresDatas }}</div>-->
   </div>
@@ -19,7 +21,7 @@ import navMain from '@/components/navMain/NavMain.vue';
 import navFooter from '@/components/navFooter/NavFooter.vue';
 import XmlHelper from '@/models/XmlHelper';
 import xmlRowData from '@/assets/xmlRowData';
-import { ElNotification } from 'element-plus';
+import { ElMessage, ElNotification } from 'element-plus';
 import { demoMode } from '@/conf/config';
 
 export default defineComponent({
@@ -30,18 +32,19 @@ export default defineComponent({
     navFooter,
   },
   setup() {
-    const autoTarget = ref([{
-      name: 'CO_EGR',
-      requires: ['scale', 'tolerance', 'value'],
-    },
-    {
-      name: 'CO_GPF',
-      requires: ['scale', 'tolerance', 'value'],
-    },
-    {
-      name: 'CO_HInj',
-      requires: ['scale', 'tolerance', 'value'],
-    },
+    const autoTarget = ref([
+      {
+        name: 'CO_EGR',
+        requires: ['scale', 'tolerance', 'value'],
+      },
+      {
+        name: 'CO_GPF',
+        requires: ['scale', 'tolerance', 'value'],
+      },
+      {
+        name: 'CO_HInj',
+        requires: ['scale', 'tolerance', 'value'],
+      },
     ]);
     let xmlHelper: XmlHelper;
     const autoRequiresDatas = reactive([]) as Array<{
@@ -50,45 +53,96 @@ export default defineComponent({
         [propName: string]: string
       }
     }>;
-    const autoRequiresDatasSync = reactive([]) as Array<{
-      name: string,
-      datas: {
-        [propName: string]: string
-      }
-    }>;
-    const checkAndSet = (param: {index: number, key: string}) => {
-      const { index, key } = param;
-      console.log('-> index: number, key: string, ', index, key);
-      console.log('-> autoRequiresDatas[index].datas[key]', autoRequiresDatas[index].datas[key]);
-      console.log('-> autoRequiresDatasSync[index].datas[key]', autoRequiresDatasSync[index].datas[key]);
-      // console.log('-> autoRequiresDatasTest', autoRequiresDatasTest);
-      // autoRequiresDatasTest[index].datas[key] = newValue;
+    // const autoRequiresDatasSync = reactive([]) as Array<{
+    //   name: string,
+    //   datas: {
+    //     [propName: string]: string
+    //   }
+    // }>;
+    // const checkAndSet = (param: {index: number, key: string}) => {
+    //   const { index, key } = param;
+    //   console.log('-> index: number, key: string, ', index, key);
+    //   console.log('-> autoRequiresDatas[index].datas[key]', autoRequiresDatas[index].datas[key]);
+    //   console.log('-> autoRequiresDatasSync[index].datas[key]',
+    //                autoRequiresDatasSync[index].datas[key]);
+    //   // console.log('-> autoRequiresDatasTest', autoRequiresDatasTest);
+    //   // autoRequiresDatasTest[index].datas[key] = newValue;
+    //   const targetVar: Element = xmlHelper
+    //     .getDesignsDBVar(autoRequiresDatas[index].name) as Element;
+    //   if (autoRequiresDatasSync[index].datas[key] !== autoRequiresDatas[index].datas[key]) {
+    //     console.log('has diff');
+    //
+    //     targetVar.setAttribute(key, autoRequiresDatas[index].datas[key]);
+    //
+    //     if (targetVar.getAttribute(key) === autoRequiresDatas[index].datas[key]) {
+    //       ElNotification({
+    //         title: '成功',
+    //         message: '记录成功',
+    //         type: 'success',
+    //         duration: 1200,
+    //       });
+    //       console.log('check pass!');
+    //       autoRequiresDatasSync[index].datas[key] = autoRequiresDatas[index].datas[key];
+    //       // console.log(xmlHelper.getXmlStr());
+    //     } else {
+    //       ElNotification({
+    //         title: '错误',
+    //         message: '记录失败...',
+    //         duration: 0,
+    //         showClose: false,
+    //       });
+    //       console.log('check faild!');
+    //     }
+    //   }
+    // };
+    const set = (param: {index: number, key: string, newValue: string}) => {
+      const { index, key, newValue } = param;
+      if (autoRequiresDatas[index].datas[key] === newValue) { return; }
       const targetVar: Element = xmlHelper
         .getDesignsDBVar(autoRequiresDatas[index].name) as Element;
-      if (autoRequiresDatasSync[index].datas[key] !== autoRequiresDatas[index].datas[key]) {
-        console.log('has diff');
-
-        targetVar.setAttribute(key, autoRequiresDatas[index].datas[key]);
-
-        if (targetVar.getAttribute(key) === autoRequiresDatas[index].datas[key]) {
-          ElNotification({
-            title: '成功',
-            message: '记录成功',
-            type: 'success',
-            duration: 1200,
-          });
-          console.log('check pass!');
-          autoRequiresDatasSync[index].datas[key] = autoRequiresDatas[index].datas[key];
-          // console.log(xmlHelper.getXmlStr());
-        } else {
-          ElNotification({
-            title: '错误',
-            message: '记录失败...',
-            duration: 0,
-            showClose: false,
-          });
-          console.log('check faild!');// TODO: 弹出错误提示框, 提示数据修改失败!
-        }
+      if (!(/^(-?\d+)(\.\d+)?$/.test(newValue))) {
+        ElNotification({
+          title: '错误',
+          message: '输入的值包含非法字符',
+          duration: 2500,
+        });
+        return;
+      }
+      if (Number.isNaN(parseFloat(newValue))) {
+        ElNotification({
+          title: '错误',
+          message: '输入的字符不是数字',
+          duration: 2500,
+        });
+        return;
+      }
+      if ((newValue.length - (newValue.indexOf('.') + 1)) > 1) {
+        ElMessage.warning({
+          message: '您输入的小数大于一位, 已帮您修正!',
+          type: 'warning',
+        });
+      }
+      const newValueFormatted = parseFloat(newValue).toFixed(1).toString();
+      // 设置完成后进行数据验证, 数据验证完毕子组件根据props.autoDatas获取值更新到自己的输入框
+      targetVar.setAttribute(key, newValueFormatted);
+      if (targetVar.getAttribute(key) === newValueFormatted) {
+        ElNotification({
+          title: '成功',
+          message: '记录成功',
+          type: 'success',
+          duration: 1200,
+        });
+        console.log('check pass!');
+        autoRequiresDatas[index].datas[key] = newValueFormatted;
+        // console.log(xmlHelper.getXmlStr());
+      } else {
+        ElNotification({
+          title: '错误',
+          message: '记录失败...',
+          duration: 0,
+          showClose: false,
+        });
+        console.log('check faild!');
       }
     };
     const xmlSave = () => {
@@ -111,14 +165,15 @@ export default defineComponent({
         });
       });
 
-      autoRequiresDatas.forEach((item) => {
-        autoRequiresDatasSync.push(JSON.parse(JSON.stringify(item)));
-      });
+      // autoRequiresDatas.forEach((item) => {
+      //   autoRequiresDatasSync.push(JSON.parse(JSON.stringify(item)));
+      // });
     });
     return {
       autoRequiresDatas,
-      checkAndSet,
+      // checkAndSet,
       xmlSave,
+      set,
     };
   },
 });
