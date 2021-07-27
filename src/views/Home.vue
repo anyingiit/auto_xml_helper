@@ -75,7 +75,7 @@ export default defineComponent({
         });
         return;
       }
-      if ((newValue.length - (newValue.indexOf('.') + 1)) > 1) {
+      if ((newValue.indexOf('.') !== -1) && (newValue.length - (newValue.indexOf('.') + 1)) > 1) {
         ElMessage.warning({
           message: '您输入的小数大于一位, 已帮您修正!',
           type: 'warning',
