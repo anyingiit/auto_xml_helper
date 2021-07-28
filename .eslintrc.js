@@ -16,4 +16,9 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     indent: ['error', 2, { ignoredNodes: ['VariableDeclaration[declarations.length=0]'] }],
   },
+  settings: {
+    'import/core-modules': [
+      'electron',
+    ],
+  },
 };

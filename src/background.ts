@@ -1,12 +1,12 @@
 import {
-  app, protocol, BrowserWindow, ipcMain,
+  app, protocol, BrowserWindow,
 } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 // import url from 'url';
-import path from 'path';
-import { readFile } from 'fs';
+// import path from 'path';
+// import { readFile } from 'fs';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -20,6 +20,7 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    show: false,
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -31,7 +32,9 @@ async function createWindow() {
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
-
+  win.once('ready-to-show', () => {
+    win.show();
+  });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
@@ -91,29 +94,29 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on('asynchronous-message', (event, arg) => {
-  console.log(arg); // prints "ping"
-  event.reply('asynchronous-reply', 'pong');
-});
+// ipcMain.on('asynchronous-message', (event, arg) => {
+//   console.log(arg); // prints "ping"
+//   event.reply('asynchronous-reply', 'pong');
+// });
+//
+// ipcMain.on('synchronous-message', (event, arg) => {
+//   console.log(arg); // prints "ping"
+//   // event.returnValue = 'pong';
+//   event.sender.send('pong');
+// });
 
-ipcMain.on('synchronous-message', (event, arg) => {
-  console.log(arg); // prints "ping"
-  // event.returnValue = 'pong';
-  event.sender.send('pong');
-});
-
-ipcMain.on('getXmlConfig', (event, arg) => {
-  // console.log("in")
-  const targetPath = path.join(__dirname, '../data/m.xml');
-  // console.log(targetPath)
-  readFile(targetPath, 'utf-8', (err, data) => {
-    if (err) {
-      // event.sender.send('asynchronous-reply', "读取失败");
-      console.log('读取失败');
-    } else {
-      // event.sender.send('asynchronous-reply', data);
-      console.log(`读取成功:\n\t${data.slice(0, 20)}...`);
-      event.reply('getXmlConfig-replay', data);
-    }
-  });
-});
+// ipcMain.on('getXmlConfig', (event, arg) => {
+//   // console.log("in")
+//   const targetPath = path.join(__dirname, '../data/m.xml');
+//   // console.log(targetPath)
+//   readFile(targetPath, 'utf-8', (err, data) => {
+//     if (err) {
+//       // event.sender.send('asynchronous-reply', "读取失败");
+//       console.log('读取失败');
+//     } else {
+//       // event.sender.send('asynchronous-reply', data);
+//       console.log(`读取成功:\n\t${data.slice(0, 20)}...`);
+//       event.reply('getXmlConfig-replay', data);
+//     }
+//   });
+// });
