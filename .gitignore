@@ -24,3 +24,6 @@ pnpm-debug.log*
 
 # electron output dir
 dist_electron/
+
+# electron build output dir
+build/
