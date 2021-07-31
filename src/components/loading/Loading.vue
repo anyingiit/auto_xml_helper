@@ -41,7 +41,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .loading{
-  //background-color: rgb(159 166 199 / 70%);
+  background-color: white;
   width: 100%;
   height: 100%;
   display: flex;
