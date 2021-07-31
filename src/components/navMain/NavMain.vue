@@ -17,8 +17,8 @@
         </div>
       </div>
     </div>
-    <div>localDatas: {{localDatas}}</div>
-    <div>autoDatas: {{autoDatas}}</div>
+<!--    <div>localDatas: {{localDatas}}</div>-->
+<!--    <div>autoDatas: {{autoDatas}}</div>-->
   </div>
 </template>
 

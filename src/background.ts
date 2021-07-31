@@ -1,12 +1,12 @@
 import {
-  app, protocol, BrowserWindow,
+  app, protocol, BrowserWindow, ipcMain,
 } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 // import url from 'url';
-// import path from 'path';
-// import { readFile } from 'fs';
+import path from 'path';
+import { readFile, writeFile, rename } from 'fs';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -94,10 +94,60 @@ if (isDevelopment) {
   }
 }
 
-// ipcMain.on('asynchronous-message', (event, arg) => {
-//   console.log(arg); // prints "ping"
-//   event.reply('asynchronous-reply', 'pong');
-// });
+ipcMain.on('readXmlFileToStr', (event) => {
+  // process.env.PORTABLE_EXECUTABLE_DIR
+  console.log(process.env.PORTABLE_EXECUTABLE_DIR);
+  const targetDir: string = process.env.PORTABLE_EXECUTABLE_DIR !== undefined ? process.env.PORTABLE_EXECUTABLE_DIR : 'F:/Project/auto_xml_helper/data/';
+  const targetPath: string = path.join(targetDir, 'm.xml');
+  console.log(process.env.IS_ELECTRON !== undefined && process.env.IS_ELECTRON);
+  console.log(targetDir);
+  readFile(targetPath, 'utf-8', (err, data) => {
+    if (err) {
+      app.quit();
+    }
+    // eslint-disable-next-line no-param-reassign
+    event.returnValue = data;
+  });
+});
+
+ipcMain.on('writeXmlFileFromStr', (event, args: { data: string }) => {
+  const { data } = args;
+  const targetDir: string = process.env.PORTABLE_EXECUTABLE_DIR !== undefined ? process.env.PORTABLE_EXECUTABLE_DIR : 'F:/Project/auto_xml_helper/data/';
+  const targetPath: string = path.join(targetDir, 'm.xml');
+  writeFile(targetPath, data, 'utf8', ((err) => {
+    if (err) {
+      event.sender.send('writeXmlFileFromStr-reply', {
+        status: false,
+        data: err,
+      });
+    } else {
+      event.sender.send('writeXmlFileFromStr-reply', {
+        status: true,
+        data: null,
+      });
+    }
+  }));
+});
+
+ipcMain.on('xmlFileBackup', (event, args: { date: string }) => {
+  const { date } = args;
+  const targetDir: string = process.env.PORTABLE_EXECUTABLE_DIR !== undefined ? process.env.PORTABLE_EXECUTABLE_DIR : 'F:/Project/auto_xml_helper/data/';
+  const targetPath: string = path.join(targetDir, 'm.xml');
+  rename(targetPath, path.join(targetDir, `old-${date}_m.xml`), (err) => {
+    // console.log('in rename callback');
+    if (err) {
+      event.sender.send('xmlFileBackup-reply', {
+        status: false,
+        data: err,
+      });
+    } else {
+      event.sender.send('xmlFileBackup-reply', {
+        status: true,
+        data: null,
+      });
+    }
+  });
+});
 //
 // ipcMain.on('synchronous-message', (event, arg) => {
 //   console.log(arg); // prints "ping"

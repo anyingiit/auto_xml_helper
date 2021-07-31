@@ -1,12 +1,17 @@
 <template>
   <div class="home">
-    <nav-header></nav-header>
-    <nav-main v-if="autoRequiresDatas.length > 0"
-              :autoDatas="autoRequiresDatas"
-              @set="set"
-    ></nav-main>
-    <nav-footer @xmlSave="xmlSave"></nav-footer>
-<!--    <div>{{ autoRequiresDatas }}</div>-->
+    <div v-if="!loadingStatus.loading">
+      <nav-header></nav-header>
+      <nav-main v-if="autoRequiresDatas.length > 0"
+                :autoDatas="autoRequiresDatas"
+                @set="set"
+      ></nav-main>
+      <nav-footer @xmlSave="xmlSave"></nav-footer>
+    </div>
+    <div v-else style="height: 100%; width: 100%">
+      <loading id="loading" :loadingStatus="loadingStatus"></loading>
+    </div>
+<!--    <div>{{loadingStatus}}</div>-->
   </div>
 </template>
 
@@ -20,10 +25,13 @@ import {
 import navHeader from '@/components/navHeader/NavHeader.vue';
 import navMain from '@/components/navMain/NavMain.vue';
 import navFooter from '@/components/navFooter/NavFooter.vue';
+import loading from '@/components/loading/Loading.vue';
 import XmlHelper from '@/models/XmlHelper';
-import xmlRowData from '@/assets/xmlRowData';
+import xmlStrData from '@/assets/xmlRowData';
 import { ElMessage, ElNotification } from 'element-plus';
 import { demoMode } from '@/conf/config';
+import { ipcRenderer } from 'electron';
+import useLoading from '@/components/loading/useLoading';
 
 export default defineComponent({
   name: 'Home',
@@ -31,8 +39,10 @@ export default defineComponent({
     navHeader,
     navMain,
     navFooter,
+    loading,
   },
   setup() {
+    const { loadingStatus, startLoading, completeTask } = useLoading();
     const autoTarget = ref([
       {
         name: 'CO_EGR',
@@ -48,12 +58,12 @@ export default defineComponent({
       },
     ]);
     let xmlHelper: XmlHelper;
-    const autoRequiresDatas = reactive([]) as Array<{
+    const autoRequiresDatas = reactive([]) as Array< {
       name: string,
       datas: {
         [propName: string]: string
       }
-    }>;
+    } >;
     const set = (param: {index: number, key: string, newValue: string}) => {
       const { index, key, newValue } = param;
       if (autoRequiresDatas[index].datas[key] === newValue) { return; }
@@ -97,7 +107,7 @@ export default defineComponent({
         // console.log(xmlHelper.getXmlStr());
       } else {
         ElNotification({
-          title: '错误',
+          title: '致命错误',
           message: '记录失败...',
           duration: 0,
           showClose: false,
@@ -106,13 +116,60 @@ export default defineComponent({
       }
     };
     const xmlSave = () => {
-      console.log(xmlHelper.getXmlStr());
+      // console.log(xmlHelper.getXmlStr());
+      startLoading(2, ['备份xml旧文件', '写入新xml文件']);
+      const date = new Date();
+      const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`;
+      ipcRenderer.send('xmlFileBackup', {
+        date: dateStr,
+      });
     };
+    ipcRenderer.on('xmlFileBackup-reply', (event, args: {status: boolean, data: unknown}) => {
+      const { status, data } = args;
+      if (status) {
+        completeTask();
+        ipcRenderer.send('writeXmlFileFromStr', {
+          data: xmlHelper.getXmlStr(),
+        });
+      } else {
+        ElNotification({
+          title: '致命错误',
+          message: `重命名失败: ${data}`,
+          duration: 0,
+          showClose: false,
+        });
+      }
+    });
+    ipcRenderer.on('writeXmlFileFromStr-reply', (event, args: {status: boolean, data: unknown}) => {
+      const { status, data } = args;
+      if (status) {
+        completeTask();
+        ElNotification({
+          title: '成功',
+          message: '备份并写入文件成功!',
+          type: 'success',
+          duration: 2500,
+        });
+      } else {
+        ElNotification({
+          title: '致命错误',
+          message: `写入新文件失败: ${data}`,
+          duration: 0,
+          showClose: false,
+        });
+      }
+    });
     onMounted(() => {
       if (demoMode) {
-        xmlHelper = new XmlHelper(xmlRowData);
+        xmlHelper = new XmlHelper(xmlStrData);
+      } else {
+        console.log('startLoading');
+        startLoading(1, ['加载本地xml文件']);
+        const xmlStr: string = ipcRenderer.sendSync('readXmlFileToStr');
+        console.log('completeTask');
+        completeTask();
+        xmlHelper = new XmlHelper(xmlStr);
       }
-
       autoTarget.value.forEach((item) => {
         const tmp: { [key: string]: string } = {};
         item.requires.forEach((property) => {
@@ -129,6 +186,7 @@ export default defineComponent({
       autoRequiresDatas,
       xmlSave,
       set,
+      loadingStatus,
     };
   },
 });
@@ -136,7 +194,13 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .home {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  #loading{
+    height: 100%;
+    width: 100%;
+  }
 }
 </style>
