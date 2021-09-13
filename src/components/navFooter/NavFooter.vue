@@ -28,7 +28,7 @@ export default defineComponent({
   justify-content: center;
   align-content: center;
   .xmlSaveButton{
-    //margin-right: 15%;
+    flex: 1;
   }
 }
 </style>
