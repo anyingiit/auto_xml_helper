@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <div v-if="!loadingStatus.loading">
-      <nav-header></nav-header>
-      <nav-main v-if="autoRequiresDatas.length > 0"
+    <div class="main" v-if="!loadingStatus.loading">
+      <nav-header class="navHeader"></nav-header>
+      <nav-main class="navMain" v-if="autoRequiresDatas.length > 0"
                 :autoDatas="autoRequiresDatas"
                 @set="set"
       ></nav-main>
-      <nav-footer @xmlSave="xmlSave"></nav-footer>
+      <nav-footer class="navFooter" @xmlSave="xmlSave"></nav-footer>
     </div>
     <div v-else style="height: 100%; width: 100%">
       <loading id="loading" :loadingStatus="loadingStatus"></loading>
@@ -202,6 +202,23 @@ export default defineComponent({
   height: 100%;
   display: flex;
   flex-direction: column;
+  .main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    .navHeader{
+      flex: 1;
+    }
+    .navMain{
+      flex: 5;
+      overflow: auto;
+      max-height: 100%;
+    }
+    .navFooter{
+      flex: 1;
+    }
+  }
   #loading{
     height: 100%;
     width: 100%;
