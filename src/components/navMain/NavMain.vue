@@ -85,7 +85,7 @@ export default defineComponent({
       display: flex;
       flex-direction: row;
       .item {
-        width: 33%;
+        flex: 1;
         margin: 30px 30px 30px 30px;
         display: flex;
         flex-direction: column;

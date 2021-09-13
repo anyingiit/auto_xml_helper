@@ -56,6 +56,10 @@ export default defineComponent({
         name: 'CO_HInj',
         requires: ['scale', 'tolerance', 'value'],
       },
+      {
+        name: 'CO_HInj',
+        requires: ['scale'],
+      },
     ]);
     let xmlHelper: XmlHelper;
     const autoRequiresDatas = reactive([]) as Array< {
