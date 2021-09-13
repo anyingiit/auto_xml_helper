@@ -46,19 +46,184 @@ export default defineComponent({
     const autoTarget = ref([
       {
         name: 'CO_EGR',
-        requires: ['scale', 'tolerance', 'value'],
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'DJW',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'DJY',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'DSB',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'EGR',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'EVT',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'GPF',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'HInj',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'IVT',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'LIVC',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'RF',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'ST',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'TWC',
+        requires: ['lowerbound', 'upperbound', 'value'],
+      },
+      {
+        name: 'CO_EGR',
+        requires: ['value'],
       },
       {
         name: 'CO_GPF',
-        requires: ['scale', 'tolerance', 'value'],
+        requires: ['value'],
       },
       {
         name: 'CO_HInj',
-        requires: ['scale', 'tolerance', 'value'],
+        requires: ['value'],
       },
       {
-        name: 'CO_HInj',
-        requires: ['scale'],
+        name: 'CO_Primary',
+        requires: ['value'],
+      },
+      {
+        name: 'CO_TWC',
+        requires: ['value'],
+      },
+      {
+        name: 'NOx_EGR',
+        requires: ['value'],
+      },
+      {
+        name: 'NOx_GPF',
+        requires: ['value'],
+      },
+      {
+        name: 'NOx_HInj',
+        requires: ['value'],
+      },
+      {
+        name: 'NOx_Primary',
+        requires: ['value'],
+      },
+      {
+        name: 'NOx_TWC',
+        requires: ['value'],
+      },
+      {
+        name: 'PM_EGR',
+        requires: ['value'],
+      },
+      {
+        name: 'PM_GPF',
+        requires: ['value'],
+      },
+      {
+        name: 'PM_HInj',
+        requires: ['value'],
+      },
+      {
+        name: 'PM_Primary',
+        requires: ['value'],
+      },
+      {
+        name: 'PM_TWC',
+        requires: ['value'],
+      },
+      {
+        name: 'P_CR',
+        requires: ['value'],
+      },
+      {
+        name: 'P_DJW',
+        requires: ['value'],
+      },
+      {
+        name: 'P_EGR',
+        requires: ['value'],
+      },
+      {
+        name: 'P_DJW',
+        requires: ['value'],
+      },
+      {
+        name: 'P_EVT',
+        requires: ['value'],
+      },
+      {
+        name: 'P_GPF',
+        requires: ['value'],
+      }, {
+        name: 'P_HInj',
+        requires: ['value'],
+      }, {
+        name: 'P_IVT',
+        requires: ['value'],
+      }, {
+        name: 'P_LIVC',
+        requires: ['value'],
+      },
+      {
+        name: 'P_RF1',
+        requires: ['value'],
+      },
+      {
+        name: 'P_RF2',
+        requires: ['value'],
+      },
+      {
+        name: 'P_RF3',
+        requires: ['value'],
+      },
+      {
+        name: 'P_TWC',
+        requires: ['value'],
+      },
+      {
+        name: 'THC_EGR',
+        requires: ['value'],
+      },
+      {
+        name: 'THC_GPF',
+        requires: ['value'],
+      },
+      {
+        name: 'THC_HInj',
+        requires: ['value'],
+      },
+      {
+        name: 'THC_Primary',
+        requires: ['value'],
+      },
+      {
+        name: 'THC_TWC',
+        requires: ['value'],
       },
     ]);
     let xmlHelper: XmlHelper;
