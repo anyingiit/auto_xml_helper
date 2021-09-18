@@ -4,16 +4,15 @@
       <div class="column"
            v-for="(varItem, varItemIndex) in localDatasLeft"
            v-bind:key="varItemIndex">
-        <div class="props"
-             v-for="(propValue, propItemKey) in varItem.datas"
-             v-bind:key="propItemKey">
-          <div class="prop">
+        <div class="varName">{{ varItem.name }}</div>
+        <div class="props">
+          <div class="prop"
+               v-for="(propValue, propItemKey) in varItem.datas"
+               v-bind:key="propItemKey">
             <div class="propHeader">
-              <div class="tabBox"></div>
               <div class="varKey">{{ propItemKey }}</div>
             </div>
             <div class="propFooter">
-              <div class="varName">{{ varItem.name }}</div>
               <InputBox class="propInputBox"
                         :data="{index: varItem.index,
                               key: propItemKey,
@@ -29,16 +28,15 @@
       <div class="column"
            v-for="(varItem, varItemIndex) in localDatasRight"
            v-bind:key="varItemIndex">
-        <div class="props"
-             v-for="(propValue, propItemKey) in varItem.datas"
-             v-bind:key="propItemKey">
-          <div class="prop">
+        <div class="varName" style="flex: 3">{{ varItem.name }}</div>
+        <div class="props" style="flex: 7">
+          <div class="prop"
+               v-for="(propValue, propItemKey) in varItem.datas"
+               v-bind:key="propItemKey">
             <div class="propHeader">
-              <div class="tabBox"></div>
               <div class="varKey">{{ propItemKey }}</div>
             </div>
             <div class="propFooter">
-              <div class="varName">{{ varItem.name }}</div>
               <InputBox class="propInputBox"
                         :data="{index: varItem.index,
                               key: propItemKey,
@@ -147,8 +145,17 @@ export default defineComponent({
     .column{
       display: flex;
       flex-direction: row;
+      .varName{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+        align-content: center;
+        justify-content: center;
+        font-size: 1.2vw;
+      }
       .props{
-        flex: 7;
+        flex: 9;
         display: flex;
         flex-direction: row;
         .prop{
@@ -160,11 +167,6 @@ export default defineComponent({
             flex: 2;
             display: flex;
             flex-direction: row;
-            .tabBox{
-              flex: 3;
-              font-size: 1vw;
-              //max-width: 80px;
-            }
             .varKey{
               flex: 7;
               font-size: 1vw;
