@@ -233,9 +233,18 @@ export default defineComponent({
         [propName: string]: string
       }
     } >;
-    const set = (param: {index: number, key: string, newValue: string}) => {
-      const { index, key, newValue } = param;
-      if (autoRequiresDatas[index].datas[key] === newValue) { return; }
+    const set = (param: {index: number,
+                          key: string, newValue: string,
+                          callback: (currentValue: string) => void}) => {
+      const {
+        index, key, newValue, callback,
+      } = param;
+      console.log(param);
+      console.log(autoRequiresDatas[index]);
+      if (autoRequiresDatas[index].datas[key] === newValue) {
+        callback(autoRequiresDatas[index].datas[key]);
+        return;
+      }
       const targetVar: Element = xmlHelper
         .getDesignsDBVar(autoRequiresDatas[index].name) as Element;
       if (!(/^(-?\d+)(\.\d+)?$/.test(newValue))) {
@@ -244,6 +253,7 @@ export default defineComponent({
           message: '输入的值包含非法字符',
           duration: 2500,
         });
+        callback(autoRequiresDatas[index].datas[key]);
         return;
       }
       if (Number.isNaN(parseFloat(newValue))) {
@@ -252,6 +262,7 @@ export default defineComponent({
           message: '输入的字符不是数字',
           duration: 2500,
         });
+        callback(autoRequiresDatas[index].datas[key]);
         return;
       }
       if ((newValue.indexOf('.') !== -1) && (newValue.length - (newValue.indexOf('.') + 1)) > 1) {
@@ -274,6 +285,7 @@ export default defineComponent({
         console.log('check pass!');
         autoRequiresDatas[index].datas[key] = newValueFormatted;
         // console.log(xmlHelper.getXmlStr());
+        callback(newValueFormatted);
       } else {
         ElNotification({
           title: '致命错误',
@@ -282,6 +294,7 @@ export default defineComponent({
           showClose: false,
         });
         console.log('check faild!');
+        callback(autoRequiresDatas[index].datas[key]);
       }
     };
     const xmlSave = () => {
@@ -333,7 +346,7 @@ export default defineComponent({
         xmlHelper = new XmlHelper(xmlStrData);
       } else {
         console.log('startLoading');
-        startLoading(1, ['加载本地xml文件']);
+        startLoading(2, ['加载本地xml文件', '构建xml数据']);
         const xmlStr: string = ipcRenderer.sendSync('readXmlFileToStr');
         console.log('completeTask');
         completeTask();
@@ -350,6 +363,8 @@ export default defineComponent({
           datas: tmp,
         });
       });
+      console.log(`now: ${autoRequiresDatas}`);
+      completeTask();
     });
     return {
       autoRequiresDatas,

@@ -1,34 +1,69 @@
 <template>
-  <div class="navMain">
-    <div class="items" v-for="(value, index) in localDatas" v-bind:key="index">
-      <div class="varName">
-        <p>{{value.name}}</p>
-      </div>
-      <div class="itemBox">
-        <div class="item" v-for="(item, key) in value.datas" v-bind:key="key">
-          <div class="itemKeyName">{{ key }}</div>
-          <el-input
-            class="itemInputBox"
-            v-model="localDatas[index].datas[key]"
-            @blur="blurSet(index, key, item)"
-            maxlength="10"
-            show-word-limit
-          ></el-input>
+  <div class="navMain" v-loading="loading">
+    <div class="dataColumnLeft">
+      <div class="column"
+           v-for="(varItem, varItemIndex) in localDatasLeft"
+           v-bind:key="varItemIndex">
+        <div class="props"
+             v-for="(propValue, propItemKey) in varItem.datas"
+             v-bind:key="propItemKey">
+          <div class="prop">
+            <div class="propHeader">
+              <div class="tabBox"></div>
+              <div class="varKey">{{ propItemKey }}</div>
+            </div>
+            <div class="propFooter">
+              <div class="varName">{{ varItem.name }}</div>
+              <InputBox class="propInputBox"
+                        :data="{index: varItem.index,
+                              key: propItemKey,
+                              value: propValue}"
+                        @set="inputBoxSet"
+              ></InputBox>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-<!--    <div>localDatas: {{localDatas}}</div>-->
-<!--    <div>autoDatas: {{autoDatas}}</div>-->
+    <div class="dataColumnRight">
+      <div class="column"
+           v-for="(varItem, varItemIndex) in localDatasRight"
+           v-bind:key="varItemIndex">
+        <div class="props"
+             v-for="(propValue, propItemKey) in varItem.datas"
+             v-bind:key="propItemKey">
+          <div class="prop">
+            <div class="propHeader">
+              <div class="tabBox"></div>
+              <div class="varKey">{{ propItemKey }}</div>
+            </div>
+            <div class="propFooter">
+              <div class="varName">{{ varItem.name }}</div>
+              <InputBox class="propInputBox"
+                        :data="{index: varItem.index,
+                              key: propItemKey,
+                              value: propValue}"
+                        @set="inputBoxSet"
+              ></InputBox>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import {
-  defineComponent, onMounted, PropType, reactive,
+  defineComponent, onMounted, PropType, reactive, ref,
 } from 'vue';
+import InputBox from '@/components/navMain/inputBox/InputBox.vue';
 
 export default defineComponent({
   name: 'navMain',
+  components: {
+    InputBox,
+  },
   props: {
     autoDatas: {
       type: Array as PropType<Array<{ name: string, datas: { [propName: string]: string } }>>,
@@ -37,65 +72,131 @@ export default defineComponent({
   },
   emits: ['set'],
   setup(props, ctx) {
-    const localDatas = reactive([]) as Array<{
+    const localDatasLeft = reactive([]) as Array<{
+      index: number,
       name: string,
       datas: {
         [propName: string]: string
       }
     }>;
-    const blurSet = (index: number, key: string, value: string) => {
+    const localDatasRight = reactive([]) as Array<{
+      index: number,
+      name: string,
+      datas: {
+        [propName: string]: string
+      }
+    }>;
+    const loading = ref(true);
+    const inputBoxSet = (param: {
+                        index: number,
+                        key: string,
+                        value: string,
+                        callback: (currentValue: string) => void}) => {
+      const {
+        index, key, value, callback,
+      } = param;
+      console.log('inputBoxSet: index: ', index, 'key: ', key, 'value: ', value);
       ctx.emit('set', {
         index,
         key,
         newValue: value,
+        callback: (currentValue: string) => {
+          callback(currentValue);
+        },
       });
-      localDatas[index].datas[key] = props.autoDatas[index].datas[key];
     };
     onMounted(() => {
       // console.log(JSON.stringify(props.autoDatas));
       // console.log(JSON.parse(JSON.stringify(props.autoDatas)));
-      props.autoDatas.forEach((item) => {
-        localDatas.push(JSON.parse(JSON.stringify(item)));
+      // console.log(`data: ${props.autoDatas.values()}`);
+      props.autoDatas.forEach((item, index) => {
+        if (Object.keys(item.datas).length > 1) {
+          localDatasLeft.push({
+            index,
+            name: item.name,
+            datas: item.datas,
+          });
+        } else {
+          localDatasRight.push({
+            index,
+            name: item.name,
+            datas: item.datas,
+          });
+        }
       });
+      loading.value = false;
     });
     return {
-      localDatas,
-      blurSet,
+      localDatasLeft,
+      localDatasRight,
+      inputBoxSet,
+      loading,
     };
   },
 });
 </script>
 
 <style lang='scss' scoped>
-.navMain {
+.navMain{
   width: 100%;
   display: flex;
-  flex-direction: column;
-  .items {
+  flex-direction: row;
+  .dataColumnLeft, .dataColumnRight{
     display: flex;
-    flex-direction: row;
-    .varName{
-      display: flex;
-      justify-content: center;
-      align-content: center;
-      align-items: center;
-    }
-    .itemBox{
-      width: 100%;
+    flex-direction: column;
+    .column{
       display: flex;
       flex-direction: row;
-      .item {
-        flex: 1;
-        margin: 30px 30px 30px 30px;
+      .props{
+        flex: 7;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        .itemKeyName {
-        }
-        .itemInputBox {
+        flex-direction: row;
+        .prop{
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 15px;
+          .propHeader{
+            flex: 2;
+            display: flex;
+            flex-direction: row;
+            .tabBox{
+              flex: 3;
+              font-size: 1vw;
+              //max-width: 80px;
+            }
+            .varKey{
+              flex: 7;
+              font-size: 1vw;
+            }
+          }
+          .propFooter{
+            flex: 7;
+            display: flex;
+            flex-direction: row;
+            .varName{
+              flex: 3;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-content: center;
+              text-align: right;
+              //max-width: 80px;
+              font-size: 1.25vw;
+            }
+            .propInputBox{
+              flex: 7;
+            }
+          }
         }
       }
-   }
+    }
+  }
+  .dataColumnLeft{
+    flex: 7;
+  }
+  .dataColumnRight{
+    flex: 3;
   }
 }
 </style>
