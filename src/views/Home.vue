@@ -45,56 +45,56 @@ export default defineComponent({
     const { loadingStatus, startLoading, completeTask } = useLoading();
     const autoTarget = ref([
       {
-        name: 'CO_EGR',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        name: 'CR',
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'DJW',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'DJY',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'DSB',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'EGR',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'EVT',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'GPF',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'HInj',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'IVT',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'LIVC',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'RF',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'ST',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'TWC',
-        requires: ['lowerbound', 'upperbound', 'value'],
+        requires: ['lowerbound', 'upperbound', 'base'],
       },
       {
         name: 'CO_EGR',
@@ -173,19 +173,26 @@ export default defineComponent({
         requires: ['value'],
       },
       {
+        name: 'P_EGR',
+        requires: ['value'],
+      },
+      {
         name: 'P_EVT',
         requires: ['value'],
       },
       {
         name: 'P_GPF',
         requires: ['value'],
-      }, {
+      },
+      {
         name: 'P_HInj',
         requires: ['value'],
-      }, {
+      },
+      {
         name: 'P_IVT',
         requires: ['value'],
-      }, {
+      },
+      {
         name: 'P_LIVC',
         requires: ['value'],
       },
