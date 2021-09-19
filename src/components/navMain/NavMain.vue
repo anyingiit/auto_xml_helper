@@ -93,7 +93,7 @@ export default defineComponent({
       const {
         index, key, value, callback,
       } = param;
-      console.log('inputBoxSet: index: ', index, 'key: ', key, 'value: ', value);
+      // console.log('inputBoxSet: index: ', index, 'key: ', key, 'value: ', value);
       ctx.emit('set', {
         index,
         key,

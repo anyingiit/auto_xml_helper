@@ -29,7 +29,7 @@ export default defineComponent({
       // console.log('inputBoxData.value: ', inputBoxData.value);
       loading.value = true;
       const startLoadingTime = new Date().getTime();
-      console.log('inputBoxData.value: ', inputBoxData.value);
+      // console.log('inputBoxData.value: ', inputBoxData.value);
       ctx.emit('set', {
         index: (props.data as { index: number, key: string, value: string }).index,
         key: (props.data as { index: number, key: string, value: string }).key,
@@ -47,10 +47,10 @@ export default defineComponent({
           }
         },
       });
-      console.log((props.data as { index: number, key: string, value: string }).value);
+      // console.log((props.data as { index: number, key: string, value: string }).value);
     };
     onMounted(() => {
-      console.log('inputBox props: ', props);
+      // console.log('inputBox props: ', props);
       inputBoxData.value = props.data?.value || '数据加载失败';
       loading.value = false;
     });

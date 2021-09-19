@@ -239,8 +239,8 @@ export default defineComponent({
       const {
         index, key, newValue, callback,
       } = param;
-      console.log(param);
-      console.log(autoRequiresDatas[index]);
+      // console.log(param);
+      // console.log(autoRequiresDatas[index]);
       if (autoRequiresDatas[index].datas[key] === newValue) {
         callback(autoRequiresDatas[index].datas[key]);
         return;
@@ -282,7 +282,7 @@ export default defineComponent({
           type: 'success',
           duration: 1200,
         });
-        console.log('check pass!');
+        // console.log('check pass!');
         autoRequiresDatas[index].datas[key] = newValueFormatted;
         // console.log(xmlHelper.getXmlStr());
         callback(newValueFormatted);
@@ -293,7 +293,7 @@ export default defineComponent({
           duration: 0,
           showClose: false,
         });
-        console.log('check faild!');
+        // console.log('check faild!');
         callback(autoRequiresDatas[index].datas[key]);
       }
     };
@@ -345,10 +345,10 @@ export default defineComponent({
       if (demoMode) {
         xmlHelper = new XmlHelper(xmlStrData);
       } else {
-        console.log('startLoading');
+        // console.log('startLoading');
         startLoading(2, ['加载本地xml文件', '构建xml数据']);
         const xmlStr: string = ipcRenderer.sendSync('readXmlFileToStr');
-        console.log('completeTask');
+        // console.log('completeTask');
         completeTask();
         xmlHelper = new XmlHelper(xmlStr);
       }
@@ -363,7 +363,7 @@ export default defineComponent({
           datas: tmp,
         });
       });
-      console.log(`now: ${autoRequiresDatas}`);
+      // console.log(`now: ${autoRequiresDatas}`);
       completeTask();
     });
     return {
